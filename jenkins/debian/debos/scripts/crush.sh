@@ -198,7 +198,7 @@ misc_directories()  {
 # Removing unneeded packages
 remove_packages()  {
 
-   for PACKAGE in "$@"
+   for PACKAGE in $@
    do
 	echo "Forcing removal of ${PACKAGE}"
 	if ! dpkg --purge --force-remove-essential --force-depends "${PACKAGE}"
@@ -216,8 +216,8 @@ if [ $# -eq 0 ]; then
   hostname_tool
   systemd
   misc_packages
-  misc_directories
   package_management
+  misc_directories
 else
   while (( "$#" )); do
     $1
