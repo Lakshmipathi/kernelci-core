@@ -219,8 +219,8 @@ if [ $# -eq 0 ]; then
   package_management
   misc_directories
 else
-  while (( "$#" )); do
-    $1
-    shift
+  for item in "$@"
+    do
+    $item
   done
 fi

@@ -38,7 +38,13 @@ hostname \
 net-tools \
 ",
     'extra_packages_remove':"",
-    'crush_image_options':"package_management systemd ncurses misc_packages misc_directories",
+    'crush_image_options':"\
+package_management \
+systemd \
+ncurses \
+misc_packages \
+misc_directories \
+",
     'script':"scripts/buster-xfstests.sh",
     'test_overlay': "overlays/xfstests",
     'docker_image': "${params.DOCKER_BASE}debos",
