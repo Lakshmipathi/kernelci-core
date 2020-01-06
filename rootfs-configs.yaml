@@ -4,13 +4,6 @@ rootfs_configs:
     debian_release: buster
     arch_list:
       - 'amd64'
-      - 'arm64'
-      - 'armel'
-      - 'armhf'
-      - 'i386'
-      - 'mips'
-      - 'mipsel'
-      - 'mips64el'
     extra_packages_remove:
       - bash
       - e2fslibs
