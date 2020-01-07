@@ -1,0 +1,30 @@
+@Library('kernelci') _
+import org.kernelci.util.Job
+/* ----------------------------------------------------------------------------
+ * Jenkins parameters
+
+DOCKER_BASE
+  Dockerhub base address used for the build images
+
+*/
+
+node("docker" && params.NODE_LABEL) {
+    def j = new Job()
+    def kci_core = "${env.WORKSPACE}"
+    def kdir = "${env.WORKSPACE}/linux"
+    def docker_image = "${params.DOCKER_BASE}debos"
+
+    j.dockerPullWithRetry(docker_image).inside("--device /dev/kvm") {
+        stage("Upload") {
+                dir(kci_core) {
+                  sh(script: """python3 ./kci_rootfs \
+				upload \
+				--token ${params.KCI_TOKEN_ID} \
+				--api ${params.KCI_API_URL} \
+                                --storage laks/test_uploads 
+				--rdir jenkins \
+                  """)
+                }
+        }
+    }
+}

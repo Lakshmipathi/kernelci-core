@@ -17,6 +17,8 @@
 
 from kernelci import shell_cmd
 import os
+import requests
+from urllib.parse import urljoin
 
 
 def _build_debos(name, config, data_path):
@@ -55,3 +57,37 @@ def build(name, config, data_path):
     else:
         print("rootfs_type:{} not supported".format(config.rootfs_type))
         return False
+
+
+def _upload_files(api, token, path, input_files):
+    headers = {
+        'Authorization': token,
+    }
+    data = {
+        'path': path,
+    }
+    files = {
+        'file{}'.format(i): (name, fobj)
+        for i, (name, fobj) in enumerate(input_files.items())
+    }
+    url = urljoin(api, '/upload')
+    resp = requests.post(url, headers=headers, data=data, files=files)
+    resp.raise_for_status()
+    return True
+
+
+def upload(api, token, storage, rootfsdir):
+    """Upload rootfs to KernelCI backend.
+
+    *api* is the URL of the KernelCI backend API
+    *token* is the backend API token to use
+    *storage* is the target on KernelCI backend
+    *rootfsdir* is the local rootfs directory path to upload
+    """
+    artifacts = {}
+    for root, _, files in os.walk(rootfsdir):
+        for f in files:
+            px = os.path.relpath(root, rootfsdir)
+            artifacts[os.path.join(px, f)] = open(os.path.join(root, f), "rb")
+    _upload_files(api, token, storage, artifacts)
+    return True
