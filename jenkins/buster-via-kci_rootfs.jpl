@@ -8,19 +8,20 @@ DOCKER_BASE
 
 */
 
-node("docker" && params.NODE_LABEL) {
+node("docker") {
     def j = new Job()
     def kci_core = "${env.WORKSPACE}"
-    def kdir = "${env.WORKSPACE}/linux"
     def docker_image = "${params.DOCKER_BASE}debos"
 
     j.dockerPullWithRetry(docker_image).inside("--device /dev/kvm") {
         stage("Build") {
                 dir(kci_core) {
-                  sh(script: """python3 ./kci_rootfs \
-				build \
-				--config buster \
-				--data-path jenkins/debian/debos \
+                  sh(script: """ 
+                                ls ..
+                                ls ../kci_rootfs_test@tmp
+                                cat ../kci_rootfs_test@tmp/rootfs-configs.yaml
+                                pwd
+                                git status
                   """)
                 }
         }
