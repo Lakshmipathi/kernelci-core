@@ -1,0 +1,68 @@
+#!/usr/bin/env groovy
+/*
+ * DOCKER_BASE
+ *   Dockerhub base address used for the build images
+ */
+@Library('kernelci') _
+
+def docker_image = "${params.DOCKER_BASE}debos"
+//def git_branch = "${params.GIT_BRANCH}"
+def rootfs_config = "${params.CONFIG_NAME}"
+def pipeline_version = VersionNumber(
+        versionNumberString: '${BUILD_DATE_FORMATTED,"yyyyMMdd"}.${BUILDS_TODAY_Z}')
+
+pipeline {
+  options { timestamps() }
+  agent none
+
+  stages {
+      stage("checkout") {
+         agent {
+             label "debos" && "docker"
+          }
+
+          steps {
+         	checkout changelog: true, poll: true, scm: [
+            	 $class: 'GitSCM',
+	             branches: [[name: "${params.GIT_BRANCH}"]],
+        	     extensions: [[$class: 'PruneStaleBranch']]
+	        ]	
+	 	script {
+                	echo "Running ${env.BUILD_ID} with ${WORKSPACE}"
+        	}	
+	  }
+	}
+
+        stage("build rootfs") {
+          agent {
+            label 'docker'
+          }
+
+          steps {
+            script {
+                    withCredentials([string(credentialsId: params.KCI_TOKEN_ID, variable: 'API_TOKEN')]) {
+                    //docker.image("${docker_image}").inside("--device /dev/kvm"){ 
+                    docker.image("${docker_image}").inside(){ 
+           		sh """
+                           #python3 ./kci_rootfs build --config ${rootfs_config} \
+			   #--data-path jenkins/debian/debos 
+                           python3 ./kci_rootfs  upload --token ${API_TOKEN} \
+			   --api ${params.KCI_API_URL} --upload-path laks/test_uploads/${pipeline_version} \
+                           --rootfs-dir jenkins/debian/debos/scripts
+			   """
+		    }	
+            }
+            }
+          }
+        post {
+           always {
+            //  archiveArtifacts artifacts: "jenkins/debian/debos/${rootfs_config}"
+	      script{
+                    echo "Finally cleanup workspace."
+                    sh "rm -rf ${WORKSPACE}/*"
+		}
+           }
+       }
+    }
+  }
+}
