@@ -138,6 +138,11 @@ class Args(object):
         'help': "Path to the kernel checkout directory",
     }
 
+    rdir = {
+        'name': '--rdir',
+        'help': "Path to the rootfs images directory",
+    }
+
     arch = {
         'name': '--arch',
         'help': "CPU architecture name",

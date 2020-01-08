@@ -16,7 +16,7 @@ pipeline {
   stages {
       stage("checkout") {
          agent {
-             label "docker" && "debos" && "builder"
+             label "debos" && "docker"
           }
 
           steps {
@@ -38,23 +38,25 @@ pipeline {
 
           steps {
             script {
+                    withCredentials([string(credentialsId: params.KCI_TOKEN_ID, variable: 'API_TOKEN')]) {
                     docker.image("${docker_image}").inside("--device /dev/kvm"){ 
+                    //docker.image("${docker_image}").inside(){ 
            		sh """
-                           # python3 ./kci_rootfs build --config ${rootfs_config} \
-			   # --data-path jenkins/debian/debos 
-                           python3 ./kci_rootfs  upload --token ${params.KCI_TOKEN_ID} \
-			   --api ${params.KCI_API_URL} --storage laks/test_uploads \
+                           python3 ./kci_rootfs build --config ${rootfs_config} \
+			   --data-path jenkins/debian/debos 
+                           python3 ./kci_rootfs  upload --token ${API_TOKEN} \
+			   --api ${params.KCI_API_URL} --storage images/rootfs/debian/buster/ \
                            --rdir jenkins/debian/debos/scripts
 			   """
 		    }	
+            }
             }
           }
         post {
            always {
             //  archiveArtifacts artifacts: "jenkins/debian/debos/${rootfs_config}"
 	      script{
-                    echo "Cleanup workspace."
-                    sh "ls && ls -R jenkins"
+                    echo "Finally cleanup workspace."
                     sh "rm -rf ${WORKSPACE}/*"
 		}
            }
