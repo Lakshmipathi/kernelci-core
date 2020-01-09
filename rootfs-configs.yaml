@@ -25,3 +25,36 @@ rootfs_configs:
       - partx
       - find
     script: ""
+  buster-xfstests:
+    rootfs_type: debos
+    debian_release: buster
+    arch_list:
+      - 'amd64'
+    extra_packages:
+      - xfsprogs
+      - e2fsprogs
+      - uuid-runtime
+      - libuuid1
+      - acl
+      - fio
+      - dbench
+      - quota
+      - attr
+      - bsdmainutils
+      - gawk
+      - python
+      - sqlite3
+      - bc
+      - libgdbm-dev
+      - perl
+      - hostname
+      - net-tools
+    extra_files_remove: ""
+    script: "scripts/buster-xfstests.sh"
+    crush_image_options:
+      - package_management
+      - systemd
+      - ncurses
+      - misc_packages
+      - misc_directories
+    test_overlay: "overlays/xfstests"
