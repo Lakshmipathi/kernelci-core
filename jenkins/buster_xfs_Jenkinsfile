@@ -42,11 +42,11 @@ pipeline {
                     docker.image("${docker_image}").inside("--device /dev/kvm"){ 
                     //docker.image("${docker_image}").inside(){ 
            		sh """
-                           #python3 ./kci_rootfs build --config ${rootfs_config} \
-			   #--data-path jenkins/debian/debos 
+                           python3 ./kci_rootfs build --config ${rootfs_config} \
+			   --data-path jenkins/debian/debos 
                            python3 ./kci_rootfs  upload --token ${API_TOKEN} \
 			   --api ${params.KCI_API_URL} --storage images/rootfs/laks/ \
-                           --rdir jenkins/debian/debos/scripts
+                           --rdir jenkins/debian/debos/${rootfs_config}
 			   """
 		    }	
             }
