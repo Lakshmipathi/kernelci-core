@@ -44,7 +44,8 @@ class cmd_validate(Command):
             print('\textra_files_remove: {}'.format(config.extra_files_remove))
             print('\tscript: {}'.format(config.script))
             print('\ttest_overlay: {}'.format(config.test_overlay))
-            print('\tcrush_image_options: {}'.format(config.crush_image_options))
+            print('\tcrush_image_options: {}'
+                  .format(config.crush_image_options))
             return True
 
 
@@ -79,7 +80,8 @@ class cmd_upload(Command):
     args = [Args.rdir, Args.storage, Args.api, Args.token]
 
     def __call__(self, config_data, args):
-        return kernelci.rootfs.upload(args.api, args.token, args.storage, args.rdir)
+        return kernelci.rootfs.upload(args.api, args.token, args.storage, 
+                                      args.rdir)
 # -----------------------------------------------------------------------------
 # Main
 #

@@ -44,7 +44,7 @@ class RootFS_Debos(RootFS):
                  arch_list=None, extra_packages=None,
                  extra_packages_remove=None,
                  extra_files_remove=None, script="",
-                 test_overlay="",crush_image_options=None):
+                 test_overlay="", crush_image_options=None):
 
         super(RootFS_Debos, self).__init__(name, rootfs_type)
         self._debian_release = debian_release
@@ -62,7 +62,7 @@ class RootFS_Debos(RootFS):
         kw.update(cls._kw_from_yaml(
             config, ['name', 'debian_release', 'arch_list',
                      'extra_packages', 'extra_packages_remove',
-                     'extra_files_remove', 'script','test_overlay',
+                     'extra_files_remove', 'script', 'test_overlay',
                      'crush_image_options']))
         return cls(**kw)
 
