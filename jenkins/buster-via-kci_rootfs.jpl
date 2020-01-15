@@ -12,18 +12,29 @@ node("docker") {
     def j = new Job()
     def kci_core = "${env.WORKSPACE}"
     def docker_image = "${params.DOCKER_BASE}debos"
+    def rootfs_config = "${params.CONFIG_NAME}"
+    def pipeline_version = VersionNumber(
+        versionNumberString: '${BUILD_DATE_FORMATTED,"yyyyMMdd"}.${BUILDS_TODAY_Z}')
 
+    checkout scm
     j.dockerPullWithRetry(docker_image).inside("--device /dev/kvm") {
-        stage("Build") {
+        stage("build rootfs") {
                 dir(kci_core) {
                   sh(script: """ 
-                                ls ..
-                                ls ../kci_rootfs_test@tmp
-                                cat ../kci_rootfs_test@tmp/rootfs-configs.yaml
-                                pwd
-                                git status
+                                python3 ./kci_rootfs build --config ${rootfs_config} \
+			        --data-path jenkins/debian/debos 
+                                mkdir -p ${pipeline_version}
+                                mv jenkins/debian/debos/${rootfs_config}/* ${pipeline_version}
                   """)
                 }
         }
+        stage("archive") {
+                dir(kci_core) {
+                  sh(script: """ 
+                              ls -Rl ${pipeline_version} 
+                  """)
+                archiveArtifacts artifacts: "${pipeline_version}/**"
+               }
+       }
     }
 }
