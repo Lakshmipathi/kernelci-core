@@ -14,7 +14,7 @@ pipeline {
   agent none
 
   stages {
-      stage("checkout") {
+      stage("CHECKOUT") {
          agent {
              label "debos" && "docker"
           }
@@ -26,41 +26,16 @@ pipeline {
         	     extensions: [[$class: 'PruneStaleBranch']]
 	        ]	
 	 	script {
-                	echo "Running ${env.BUILD_ID} with ${WORKSPACE}"
+                	echo "RUNNing ${env.BUILD_ID} with ${WORKSPACE} against ${params.GIT_BRANCH}"
+                    docker.image("${docker_image}").inside("--device /dev/kvm"){ 
+           		sh """
+                           ls 
+                           # python3 ./kci_rootfs build --config ${rootfs_config} \
+			   # --data-path jenkins/debian/debos 
+			   """
+		    }	
         	}	
 	  }
 	}
-
-        stage("build rootfs") {
-          agent {
-            label 'docker'
-          }
-
-          steps {
-            script {
-                    withCredentials([string(credentialsId: params.KCI_TOKEN_ID, variable: 'API_TOKEN')]) {
-                    docker.image("${docker_image}").inside("--device /dev/kvm"){ 
-                    //docker.image("${docker_image}").inside(){ 
-           		sh """
-                           python3 ./kci_rootfs build --config ${rootfs_config} \
-			   --data-path jenkins/debian/debos 
-                           python3 ./kci_rootfs  upload --token ${API_TOKEN} \
-			   --api ${params.KCI_API_URL} --storage images/rootfs/debian/buster/ \
-                           --rdir jenkins/debian/debos/scripts
-			   """
-		    }	
-            }
-            }
-          }
-        post {
-           always {
-            //  archiveArtifacts artifacts: "jenkins/debian/debos/${rootfs_config}"
-	      script{
-                    echo "Finally cleanup workspace."
-                    sh "rm -rf ${WORKSPACE}/*"
-		}
-           }
-       }
-    }
   }
 }

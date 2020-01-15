@@ -12,18 +12,21 @@ node("docker") {
     def j = new Job()
     def kci_core = "${env.WORKSPACE}"
     def docker_image = "${params.DOCKER_BASE}debos"
+    def git_branch = "${params.GIT_BRANCH}"
 
+//    checkout changelog: false, poll: false, scm: [$class: 'GitSCM', branches: [[name: '${git_branch}']], 
+//    doGenerateSubmoduleConfigurations: false, extensions: [[$class: 'CleanBeforeCheckout']], submoduleCfg: [], 
+//    userRemoteConfigs: [[url: 'https://github.com/Lakshmipathi/kernelci-core']]]
+    checkout scm
     j.dockerPullWithRetry(docker_image).inside("--device /dev/kvm") {
-        stage("Build") {
+        stage("Build-JPL2") {
                 dir(kci_core) {
                   sh(script: """ 
-                                ls ..
-                                ls ../kci_rootfs_test@tmp
-                                cat ../kci_rootfs_test@tmp/rootfs-configs.yaml
-                                pwd
-                                git status
+                                ls 
+                                ls -l 
+                                sleep 60
                   """)
                 }
         }
-    }
+    } 
 }
