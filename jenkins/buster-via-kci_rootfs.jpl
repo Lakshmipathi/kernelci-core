@@ -8,7 +8,7 @@ DOCKER_BASE
 
 */
 
-node("docker") {
+node("debos && docker") {
     def j = new Job()
     def kci_core = "${env.WORKSPACE}"
     def docker_image = "${params.DOCKER_BASE}debos"
@@ -28,7 +28,7 @@ node("docker") {
                   """)
                 }
         }
-        stage("archive") {
+        stage("archive rootfs") {
                 dir(kci_core) {
                   sh(script: """ 
                               ls -Rl ${pipeline_version} 
