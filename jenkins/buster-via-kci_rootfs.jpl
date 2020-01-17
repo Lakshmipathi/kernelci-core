@@ -22,7 +22,7 @@ node("debos && docker") {
                 dir(kci_core) {
                   sh(script: """ 
                                 python3 ./kci_rootfs build --config ${rootfs_config} \
-			        --data-path jenkins/debian/debos 
+			        --data-path jenkins/debian/debos --arch-type armhf
                                 mkdir -p ${pipeline_version}
                                 mv jenkins/debian/debos/${rootfs_config}/* ${pipeline_version}
                   """)
