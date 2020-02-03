@@ -1,5 +1,4 @@
 @Library('kernelci') _
-import org.kernelci.util.Job
 /* ----------------------------------------------------------------------------
  * Jenkins parameters
 
@@ -8,33 +7,61 @@ DOCKER_BASE
 
 */
 
+def build_rootfs(arch,rootfs_config,pipeline_version) {
+  return {
+    node ("debos && docker") {
+      def kci_core = "${env.WORKSPACE}"
+      try {
+        checkout scm
+        docker.image('kernelci/staging-debos').inside(' --privileged --device /dev/kvm ') {
+        stage ("Build base image for ${arch}") {
+                dir(kci_core) {
+		             sh """
+                                ls -l
+                                #python3 ./kci_rootfs build --config ${rootfs_config} \
+			        #--data-path jenkins/debian/debos --arch-type ${arch}
+                                mkdir -p ${pipeline_version}
+                                mv jenkins/debian/debos/${rootfs_config}/${arch} ${pipeline_version}
+                               """
+                 }
+        }
+        stage ("Upload images for ${arch}") {
+                dir(kci_core) {
+		             sh """
+                                echo 'uploading images'
+
+                                python3 ./kci_rootfs upload \
+                                --token ${params.KCI_TOKEN_ID} \
+                                --api ${params.KCI_API_URL} \
+                                --rootfs-dir jenkins/debian/debos/scripts \
+                                --upload-path laks/test_uploads/${pipeline_version}
+                               """
+                 }
+        }
+        }
+
+      } catch (e) {
+        throw e
+      } finally {
+        archiveArtifacts artifacts: "${pipeline_version}/**"
+      }
+    }
+  }
+}
+
 node("debos && docker") {
-    def j = new Job()
-    def kci_core = "${env.WORKSPACE}"
     def docker_image = "${params.DOCKER_BASE}debos"
     def rootfs_config = "${params.CONFIG_NAME}"
     def pipeline_version = VersionNumber(
         versionNumberString: '${BUILD_DATE_FORMATTED,"yyyyMMdd"}.${BUILDS_TODAY_Z}')
 
-    checkout scm
-    j.dockerPullWithRetry(docker_image).inside("--device /dev/kvm") {
-        stage("build rootfs") {
-                dir(kci_core) {
-                  sh(script: """ 
-                                python3 ./kci_rootfs build --config ${rootfs_config} \
-			        --data-path jenkins/debian/debos --arch-type armhf
-                                mkdir -p ${pipeline_version}
-                                mv jenkins/debian/debos/${rootfs_config}/* ${pipeline_version}
-                  """)
-                }
-        }
-        stage("archive rootfs") {
-                dir(kci_core) {
-                  sh(script: """ 
-                              ls -Rl ${pipeline_version} 
-                  """)
-                archiveArtifacts artifacts: "${pipeline_version}/**"
-               }
-       }
+    def arch_list = ["amd64", "arm64"]
+    //def arch_list = ["amd64", "arm64","armel","armhf","i386","mips","mipsel","mips64el"]
+
+    def buildjobs=[:]
+    for (int i = 0; i < arch_list.size(); i++) {
+          buildjobs[i]=build_rootfs(arch_list[i],rootfs_config,pipeline_version)
     }
+
+    parallel buildjobs
 }
