@@ -246,6 +246,12 @@ class Args(object):
         'help': "Path to the debos files",
     }
 
+    arch_type = {
+        'name': '--arch-type',
+        'help': "Build rootfs for this architecture",
+        'required': False,
+    }
+
 
 class Command(object):
     """A command helper class.

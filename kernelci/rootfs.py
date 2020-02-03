@@ -19,8 +19,14 @@ from kernelci import shell_cmd
 import os
 
 
-def _build_debos(name, config, data_path):
-    for arch_type in config.arch_list:
+def _build_debos(name, config, data_path, arch_type):
+    arch_list = []
+    if arch_type is None:
+        arch_list = config.arch_list
+    else:
+        arch_list.append(arch_type)
+
+    for arch in arch_list:
         cmd = 'cd {data_path} && debos \
 -t architecture:{arch} \
 -t suite:{release_name} \
@@ -34,7 +40,7 @@ def _build_debos(name, config, data_path):
 rootfs.yaml'.format(
             name=name,
             data_path=data_path,
-            arch=arch_type,
+            arch=arch,
             release_name=config.debian_release,
             extra_packages=" ".join(config.extra_packages),
             extra_packages_remove=" ".join(config.extra_packages_remove),
@@ -48,9 +54,17 @@ rootfs.yaml'.format(
     return True
 
 
-def build(name, config, data_path):
+def build(name, config, data_path, arch_type=None):
+    """Build rootfs images.
+
+    *name* is the rootfs config
+    *config* contains rootfs-configs.yaml entries
+    *data_path* points to debos location
+    *arch_type* optional. overrides arch_list value from yaml
+    """
+
     if config.rootfs_type == "debos":
-        return _build_debos(name, config, data_path)
+        return _build_debos(name, config, data_path, arch_type)
     else:
         print("rootfs_type:{} not supported".format(config.rootfs_type))
         return False
