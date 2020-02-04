@@ -21,22 +21,25 @@ def build_rootfs(arch,rootfs_config,pipeline_version) {
                                 #python3 ./kci_rootfs build --config ${rootfs_config} \
 			        #--data-path jenkins/debian/debos --arch-type ${arch}
                                 mkdir -p ${pipeline_version}
-                                mv jenkins/debian/debos/${rootfs_config}/${arch} ${pipeline_version}
+                                touch ${pipeline_version}/a234 
+                                touch ${pipeline_version}/a2345 
+                                #mv jenkins/debian/debos/${rootfs_config}/${arch} ${pipeline_version}
                                """
                  }
         }
         stage ("Upload images for ${arch}") {
-                dir(kci_core) {
+                withCredentials([string(credentialsId: params.KCI_TOKEN_ID, variable: 'API_TOKEN')]) {
+                  dir(kci_core) {
 		             sh """
                                 echo 'uploading images'
-
                                 python3 ./kci_rootfs upload \
-                                --token ${params.KCI_TOKEN_ID} \
+                                --token ${API_TOKEN} \
                                 --api ${params.KCI_API_URL} \
-                                --rootfs-dir jenkins/debian/debos/scripts \
+                                --rootfs-dir ${pipeline_version} \
                                 --upload-path laks/test_uploads/${pipeline_version}
                                """
-                 }
+                  }
+               }
         }
         }
 
