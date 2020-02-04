@@ -138,6 +138,11 @@ class Args(object):
         'help': "Path to the kernel checkout directory",
     }
 
+    rootfs_dir = {
+        'name': '--rootfs-dir',
+        'help': "Path to the rootfs images directory",
+    }
+
     arch = {
         'name': '--arch',
         'help': "CPU architecture name",
@@ -250,6 +255,11 @@ class Args(object):
         'name': '--arch-type',
         'help': "Build rootfs for this architecture",
         'required': False,
+    }
+
+    upload_path = {
+        'name': '--upload-path',
+        'help': "Upload path on Storage where rootfs stored",
     }
 
 
