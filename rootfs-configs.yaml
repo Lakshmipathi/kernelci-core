@@ -3,6 +3,7 @@ rootfs_configs:
     rootfs_type: debos
     debian_release: buster
     arch_list:
+      - 'armhf'
       - 'arm64'
     extra_packages_remove:
       - bash
@@ -25,8 +26,3 @@ rootfs_configs:
       - partx
       - find
     script: ""
-  busterV2:
-    rootfs_type: debos
-    debian_release: buster
-    arch_list:
-      - 'armel'

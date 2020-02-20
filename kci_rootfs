@@ -59,6 +59,43 @@ class cmd_list_configs(Command):
         return True
 
 
+class cmd_list_variants(Command):
+    help = "Lists all rootfs variants"
+    opt_args = [Args.config, Args.arch]
+
+    def __call__(self, config_data, args, **kwargs):
+        rootfs_configs = config_data['rootfs_configs']
+        config_name = args.config
+        arch = args.arch
+
+        if arch and config_name:
+            if config_name not in rootfs_configs:
+                print("{} : invalid config entry".format(config_name))
+                return False
+            elif arch not in rootfs_configs[config_name].arch_list:
+                print("{} : invalid arch entry".format(arch))
+                return False
+            else:
+                print(config_name, arch)
+        elif arch:
+            for config_name in rootfs_configs:
+                for arch_type in rootfs_configs[config_name].arch_list:
+                    if arch == arch_type:
+                        print(config_name, arch)
+        elif config_name:
+            if config_name not in rootfs_configs:
+                print("{} : invalid config entry".format(config_name))
+                return False
+            for arch_type in rootfs_configs[config_name].arch_list:
+                print(config_name, arch_type)
+        else:
+            for config_name in rootfs_configs:
+                for arch_type in rootfs_configs[config_name].arch_list:
+                    print(config_name, arch_type)
+
+        return True
+
+
 class cmd_build(Command):
     help = "Build rootfs image"
     args = [Args.config, Args.data_path]

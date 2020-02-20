@@ -23,13 +23,14 @@
 @Library('kernelci') _
 import org.kernelci.util.Job
 
-def build_rootfs(rootfs_config,pipeline_version,kci_core) {
+def build_rootfs(rootfs_config, arch, pipeline_version,kci_core) {
 
     dir(kci_core) {
         sh(script: """\
 ./kci_rootfs \
 build \
 --config ${rootfs_config} \
+--arch  ${arch} \
 --data-path jenkins/debian/debos 
 mkdir -p ${pipeline_version} 
 mv jenkins/debian/debos/${rootfs_config} ${pipeline_version}
@@ -44,7 +45,7 @@ upload \
 --token ${API_TOKEN} \
 --api ${params.KCI_API_URL} \
 --rootfs-dir ${pipeline_version} \
---upload-path laks/test_uploads/${pipeline_version} 
+--upload-path images/rootfs/debian/${rootfs_config}/${pipeline_version} 
 """)
 
         }
@@ -56,6 +57,7 @@ node("debos && docker") {
     def j = new Job()
     def kci_core = "${env.WORKSPACE}/kernelci-core"
     def rootfs_config = "${params.CONFIG_NAME}"
+    def arch = "${params.ARCH}"
     def docker_image = "${params.DOCKER_BASE}debos"
     def pipeline_version =  "${params.PIPELINE_VERSION}"
 
@@ -66,7 +68,7 @@ node("debos && docker") {
     j.dockerPullWithRetry(docker_image).inside(" --privileged --device /dev/kvm ") {
         stage("Build ${rootfs_config}") {
             timeout(time: 180, unit: 'MINUTES') {
-	        build_rootfs(rootfs_config, pipeline_version, kci_core)
+	        build_rootfs(rootfs_config, arch, pipeline_version, kci_core)
             }
         }
     }

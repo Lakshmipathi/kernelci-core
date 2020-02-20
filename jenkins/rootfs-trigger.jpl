@@ -22,10 +22,6 @@
 /* ----------------------------------------------------------------------------
  * Jenkins parameters
 
-KCI_API_URL (https://api.kernelci.org)
-  URL of the KernelCI backend API
-KCI_TOKEN_ID
-  Identifier of the KernelCI backend API token stored in Jenkins
 KCI_CORE_URL (https://github.com/kernelci/kernelci-core.git)
   URL of the kernelci-core repository
 KCI_CORE_BRANCH (master)
@@ -38,21 +34,37 @@ DOCKER_BASE
 import org.kernelci.util.Job
 
 
-def listConfigs(kci_core, config_list) {
+def listVariants(kci_core, config_list, rootfs_config, rootfs_arch) {
+    def cli_opts = ' '
+
+    if (rootfs_config) {
+            cli_opts += " --config ${rootfs_config}"
+    }
+       
+    if (rootfs_arch) {
+         cli_opts += " --arch ${rootfs_arch}"
+    }
+
     dir(kci_core) {
         def rootfs_config_list_raw = sh(script: """\
 ./kci_rootfs \
-list_configs \
+list_variants \
+${cli_opts} 
 """, returnStdout: true).trim()
-        def rootfs_config_list =  rootfs_config_list_raw.tokenize('\n')
-        for (String config_name: rootfs_config_list) {
-            config_list.add(config_name)
-        }
+
+    def rootfs_config_list =  rootfs_config_list_raw.tokenize('\n')
+
+    for (String rootfs_config_raw: rootfs_config_list) {
+        def data = rootfs_config_raw.tokenize(' ')
+        def config = data[0]
+        def arch = data[1]
+        config_list.add([config, arch])
+    }
     }
 }
 
 
-def buildRootfsStep(job, config) {
+def buildRootfsStep(job, config ,arch) {
     def node_label = "docker"
     def parallel_builds = "4"
     def pipeline_version = VersionNumber(
@@ -60,6 +72,7 @@ def buildRootfsStep(job, config) {
 
     def str_params = [
         'CONFIG_NAME': config,
+        'ARCH': arch,
         'PIPELINE_VERSION':pipeline_version,
     ]
     def job_params = []
@@ -77,7 +90,15 @@ node("docker && build-trigger") {
     def j = new Job()
     def kci_core = "${env.WORKSPACE}/kernelci-core"
     def docker_image = "${params.DOCKER_BASE}debos"
+    def ROOTFS_CONFIG = "${params.ROOTFS_CONFIG}"
+    def ROOTFS_ARCH = "${params.ROOTFS_ARCH}"
+
     def configs = []
+
+    print("""\
+    rootfs_config:    ${params.ROOTFS_CONFIG}
+    rootfs_arch:    ${params.ROOTFS_ARCH}
+    Container: ${docker_image}""")
 
     j.dockerPullWithRetry(docker_image).inside() {
 
@@ -90,20 +111,21 @@ node("docker && build-trigger") {
         }
 
         stage("Configs") {
-            listConfigs(kci_core, configs)
+            listVariants(kci_core, configs, rootfs_config, rootfs_arch)
         }
 
         stage("Build") {
             def builds = [:]
             def i = 0
 
-            for (config_name in configs) {
-
-                def step_name = "${i} ${config_name}"
+            for (item in configs) {
+                def config_name = item[0]
+                def arch = item[1]
+                def step_name = "${i} ${config_name} ${arch}"
                 print(step_name)
 
                 builds[step_name] = buildRootfsStep(
-                    "rootfs-builder", config_name)
+                    "rootfs-builder", config_name, arch)
 
                 i += 1
             }
