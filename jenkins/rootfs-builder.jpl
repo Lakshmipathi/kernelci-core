@@ -33,7 +33,7 @@ build \
 --arch  ${arch} \
 --data-path jenkins/debian/debos 
 mkdir -p ${pipeline_version} 
-mv jenkins/debian/debos/${rootfs_config} ${pipeline_version}
+mv jenkins/debian/debos/${rootfs_config}/* ${pipeline_version}
 """)
 
     archiveArtifacts artifacts: "${pipeline_version}/**"
