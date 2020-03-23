@@ -42,8 +42,7 @@ ROOTFS_ARCH
 @Library('kernelci') _
 import org.kernelci.util.Job
 
-def build_rootfs(config, arch, pipeline_version,kci_core) {
-
+def build_rootfs(config, arch, pipeline_version, kci_core) {
     dir(kci_core) {
         sh(script: """\
 ./kci_rootfs \
@@ -66,10 +65,8 @@ upload \
 --rootfs-dir ${pipeline_version} \
 --upload-path images/rootfs/debian/${config}/${pipeline_version}
 """)
-
         }
     }
-
 }
 
 node("debos && docker") {
@@ -86,7 +83,7 @@ node("debos && docker") {
 
     j.dockerPullWithRetry(docker_image).inside(" --privileged --device /dev/kvm ") {
         stage("Build ${config} ${arch}") {
-            timeout(time: 60, unit: 'MINUTES') {
+            timeout(time: 4, unit: 'HOURS') {
 	        build_rootfs(config, arch, pipeline_version, kci_core)
             }
         }

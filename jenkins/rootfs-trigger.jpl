@@ -42,11 +42,11 @@ def listVariants(kci_core, config_list, rootfs_config, rootfs_arch) {
     def cli_opts = ' '
 
     if (rootfs_config) {
-            cli_opts += " --config ${rootfs_config}"
+        cli_opts += " --config ${rootfs_config}"
     }
        
     if (rootfs_arch) {
-         cli_opts += " --arch ${rootfs_arch}"
+        cli_opts += " --arch ${rootfs_arch}"
     }
 
     dir(kci_core) {
@@ -56,21 +56,19 @@ list_variants \
 ${cli_opts} 
 """, returnStdout: true).trim()
 
-    def rootfs_config_list =  rootfs_config_list_raw.tokenize('\n')
+        def rootfs_config_list =  rootfs_config_list_raw.tokenize('\n')
 
-    for (String rootfs_config_raw: rootfs_config_list) {
-        def data = rootfs_config_raw.tokenize(' ')
-        def config = data[0]
-        def arch = data[1]
-        config_list.add([config, arch])
-    }
+        for (String rootfs_config_raw: rootfs_config_list) {
+            def data = rootfs_config_raw.tokenize(' ')
+            def config = data[0]
+            def arch = data[1]
+            config_list.add([config, arch])
+        }
     }
 }
 
 
 def buildRootfsStep(job, config ,arch) {
-    def node_label = "docker"
-    def parallel_builds = "4"
     def pipeline_version = VersionNumber(
         versionNumberString: '${BUILD_DATE_FORMATTED,"yyyyMMdd"}.${BUILDS_TODAY_Z}')
 
@@ -100,9 +98,15 @@ node("docker && build-trigger") {
     def configs = []
 
     print("""\
-    rootfs_config:    ${params.ROOTFS_CONFIG}
+    rootfs_config:  ${params.ROOTFS_CONFIG}
     rootfs_arch:    ${params.ROOTFS_ARCH}
-    Container: ${docker_image}""")
+    Container:      ${docker_image}""")
+
+    if (params.ROOTFS_ARCH == ''){
+        print("Please provide valid architecture.")
+        currentBuild.result = 'ABORTED'
+        return
+    }
 
     j.dockerPullWithRetry(docker_image).inside() {
 
@@ -111,7 +115,6 @@ node("docker && build-trigger") {
                 j.cloneKciCore(
                     kci_core, params.KCI_CORE_URL, params.KCI_CORE_BRANCH)
             }
-
         }
 
         stage("Configs") {
@@ -136,6 +139,5 @@ node("docker && build-trigger") {
 
             parallel(builds)
         }
-
     }
 }
