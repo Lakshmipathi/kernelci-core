@@ -1,7 +1,8 @@
 #!/bin/bash
-set -ue
 
 # Important: This script is run under QEMU
+
+set -e
 
 # Build-depends needed to build the test suites, they'll be removed later
 BUILD_DEPS="\
@@ -17,34 +18,31 @@ BUILD_DEPS="\
     libc6-dev \
 "
 
-apt-get update -y
-apt-get install -y ${BUILD_DEPS}
+apt-get install --no-install-recommends -y  ${BUILD_DEPS}
 
-########################################################################
-# Build tests                                                          #
-########################################################################
-
+BUILD_DIR="/ltp"
 BUILDFILE=/test_suites.json
 echo '{  "tests_suites": [' >> $BUILDFILE
 
 ########################################################################
 # Build and install tests                                              #
 ########################################################################
-BUILD_DIR="/ltp"
 mkdir -p ${BUILD_DIR} && cd ${BUILD_DIR}
 
 git config --global http.sslverify false
+
 LTP_URL="https://github.com/linux-test-project/ltp.git"
 LTP_SHA=$(git ls-remote ${LTP_URL} | head -n 1 | cut -f 1)
 
-git clone --depth=1 ${LTP_URL}
-cd ltp && make autotools && ./configure && make all
-
-find . -executable -type f -exec strip {} \;
-make install
-
 echo '    {"name": "ltp-tests", "git_url": "'$LTP_URL'", "git_commit": "'$LTP_SHA'" }' >> $BUILDFILE
 echo '  ]}' >> $BUILDFILE
+
+git clone --depth=1 -b 20200515 ${LTP_URL}
+cd ltp && make autotools 
+./configure 
+make all
+find . -executable -type f -exec strip {} \;
+make install
 
 ########################################################################
 # Cleanup: remove files and packages we don't want in the images       #
