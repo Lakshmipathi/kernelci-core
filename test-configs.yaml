@@ -2000,6 +2000,7 @@ test_configs:
     test_plans:
       - baseline
       - baseline-nfs
+      - ltp-ipc
       - sleep
       - usb
 
@@ -2015,6 +2016,7 @@ test_configs:
       - igt-kms-rockchip
       - igt-gpu-panfrost
       - kselftest
+      - ltp-ipc
       - sleep
       - usb
       - v4l2-compliance-uvc
@@ -2066,6 +2068,7 @@ test_configs:
   - device_type: sun50i-h6-pine-h64
     test_plans:
       - baseline
+      - ltp-ipc
 
   - device_type: sun50i-h6-pine-h64-model-b
     test_plans:
