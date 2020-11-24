@@ -170,6 +170,50 @@ test_plans:
     params:
       job_timeout: '120'
 
+  ltp-admin_tools:
+    rootfs: debian_buster-ltp_nfs
+    pattern: 'ltp/{category}-{method}-{protocol}-{rootfs}-ltp-template.jinja2'
+    filters:
+      - blocklist: *kselftest_defconfig_filter
+    params:
+      skip_install: "true"
+      tst_cmdfiles: "admin_tools"
+      timeout: '15'
+      skipfile: skipfile-lkft.yaml
+
+  ltp-connectors:
+    rootfs: debian_buster-ltp_nfs
+    pattern: 'ltp/{category}-{method}-{protocol}-{rootfs}-ltp-template.jinja2'
+    filters:
+      - blocklist: *kselftest_defconfig_filter
+    params:
+      skip_install: "true"
+      tst_cmdfiles: "connectors"
+      timeout: '15'
+      skipfile: skipfile-lkft.yaml
+
+  ltp-containers:
+    rootfs: debian_buster-ltp_nfs
+    pattern: 'ltp/{category}-{method}-{protocol}-{rootfs}-ltp-template.jinja2'
+    filters:
+      - blocklist: *kselftest_defconfig_filter
+    params:
+      skip_install: "true"
+      tst_cmdfiles: "containers"
+      timeout: '15'
+      skipfile: skipfile-lkft.yaml
+
+  ltp-controllers:
+    rootfs: debian_buster-ltp_nfs
+    pattern: 'ltp/{category}-{method}-{protocol}-{rootfs}-ltp-template.jinja2'
+    filters:
+      - blocklist: *kselftest_defconfig_filter
+    params:
+      skip_install: "true"
+      tst_cmdfiles: "controllers"
+      timeout: '45'
+      skipfile: skipfile-lkft.yaml
+
   ltp-crypto:
     rootfs: debian_buster-ltp_nfs
     pattern: 'ltp/{category}-{method}-{protocol}-{rootfs}-ltp-template.jinja2'
@@ -181,6 +225,138 @@ test_plans:
       timeout: '15'
       skipfile: skipfile-lkft.yaml
 
+  ltp-device-drivers:
+    rootfs: debian_buster-ltp_nfs
+    pattern: 'ltp/{category}-{method}-{protocol}-{rootfs}-ltp-template.jinja2'
+    filters:
+      - blocklist: *kselftest_defconfig_filter
+    params:
+      skip_install: "true"
+      tst_cmdfiles: "device-drivers"
+      timeout: '15'
+      skipfile: skipfile-lkft.yaml
+
+  ltp-fcntl-locktests:
+    rootfs: debian_buster-ltp_nfs
+    pattern: 'ltp/{category}-{method}-{protocol}-{rootfs}-ltp-template.jinja2'
+    filters:
+      - blocklist: *kselftest_defconfig_filter
+    params:
+      skip_install: "true"
+      tst_cmdfiles: "fcntl-locktests"
+      timeout: '15'
+      skipfile: skipfile-lkft.yaml
+
+  ltp-filecaps:
+    rootfs: debian_buster-ltp_nfs
+    pattern: 'ltp/{category}-{method}-{protocol}-{rootfs}-ltp-template.jinja2'
+    filters:
+      - blocklist: *kselftest_defconfig_filter
+    params:
+      skip_install: "true"
+      tst_cmdfiles: "filecaps"
+      timeout: '15'
+      skipfile: skipfile-lkft.yaml
+
+  ltp-firmware:
+    rootfs: debian_buster-ltp_nfs
+    pattern: 'ltp/{category}-{method}-{protocol}-{rootfs}-ltp-template.jinja2'
+    filters:
+      - blocklist: *kselftest_defconfig_filter
+    params:
+      skip_install: "true"
+      tst_cmdfiles: "firmware"
+      timeout: '15'
+      skipfile: skipfile-lkft.yaml
+
+  ltp-fs:
+    rootfs: debian_buster-ltp_nfs
+    pattern: 'ltp/{category}-{method}-{protocol}-{rootfs}-ltp-template.jinja2'
+    filters:
+      - blocklist: *kselftest_defconfig_filter
+    params:
+      skip_install: "true"
+      tst_cmdfiles: "fs"
+      timeout: '60'
+      skipfile: skipfile-lkft.yaml
+
+  ltp-fs_bind:
+    rootfs: debian_buster-ltp_nfs
+    pattern: 'ltp/{category}-{method}-{protocol}-{rootfs}-ltp-template.jinja2'
+    filters:
+      - blocklist: *kselftest_defconfig_filter
+    params:
+      skip_install: "true"
+      tst_cmdfiles: "fs_bind"
+      timeout: '30'
+      skipfile: skipfile-lkft.yaml
+
+  ltp-fsx:
+    rootfs: debian_buster-ltp_nfs
+    pattern: 'ltp/{category}-{method}-{protocol}-{rootfs}-ltp-template.jinja2'
+    filters:
+      - blocklist: *kselftest_defconfig_filter
+    params:
+      skip_install: "true"
+      tst_cmdfiles: "fsx"
+      timeout: '15'
+      skipfile: skipfile-lkft.yaml
+
+  ltp-hotplug:
+    rootfs: debian_buster-ltp_nfs
+    pattern: 'ltp/{category}-{method}-{protocol}-{rootfs}-ltp-template.jinja2'
+    filters:
+      - blocklist: *kselftest_defconfig_filter
+    params:
+      skip_install: "true"
+      tst_cmdfiles: "hotplug"
+      timeout: '15'
+      skipfile: skipfile-lkft.yaml
+
+  ltp-hugetlb:
+    rootfs: debian_buster-ltp_nfs
+    pattern: 'ltp/{category}-{method}-{protocol}-{rootfs}-ltp-template.jinja2'
+    filters:
+      - blocklist: *kselftest_defconfig_filter
+    params:
+      skip_install: "true"
+      tst_cmdfiles: "hugetlb"
+      timeout: '15'
+      skipfile: skipfile-lkft.yaml
+
+  ltp-include:
+    rootfs: debian_buster-ltp_nfs
+    pattern: 'ltp/{category}-{method}-{protocol}-{rootfs}-ltp-template.jinja2'
+    filters:
+      - blocklist: *kselftest_defconfig_filter
+    params:
+      skip_install: "true"
+      tst_cmdfiles: "include"
+      timeout: '15'
+      skipfile: skipfile-lkft.yaml
+
+  ltp-input:
+    rootfs: debian_buster-ltp_nfs
+    pattern: 'ltp/{category}-{method}-{protocol}-{rootfs}-ltp-template.jinja2'
+    filters:
+      - blocklist: *kselftest_defconfig_filter
+    params:
+      skip_install: "true"
+      tst_cmdfiles: "input"
+      timeout: '15'
+      skipfile: skipfile-lkft.yaml
+
+  ltp-io:
+    rootfs: debian_buster-ltp_nfs
+    pattern: 'ltp/{category}-{method}-{protocol}-{rootfs}-ltp-template.jinja2'
+    filters:
+      - blocklist: *kselftest_defconfig_filter
+    params:
+      skip_install: "true"
+      tst_cmdfiles: "io"
+      timeout: '15'
+      skipfile: skipfile-lkft.yaml
+
   ltp-ipc:
     rootfs: debian_buster-ltp_nfs
     pattern: 'ltp/{category}-{method}-{protocol}-{rootfs}-ltp-template.jinja2'
@@ -189,8 +365,197 @@ test_plans:
     params:
       skip_install: "true"
       tst_cmdfiles: "ipc"
+      timeout: '15'
       skipfile: skipfile-lkft.yaml
 
+  ltp-lib:
+    rootfs: debian_buster-ltp_nfs
+    pattern: 'ltp/{category}-{method}-{protocol}-{rootfs}-ltp-template.jinja2'
+    filters:
+      - blocklist: *kselftest_defconfig_filter
+    params:
+      skip_install: "true"
+      tst_cmdfiles: "lib"
+      timeout: '15'
+      skipfile: skipfile-lkft.yaml
+
+  ltp-logging:
+    rootfs: debian_buster-ltp_nfs
+    pattern: 'ltp/{category}-{method}-{protocol}-{rootfs}-ltp-template.jinja2'
+    filters:
+      - blocklist: *kselftest_defconfig_filter
+    params:
+      skip_install: "true"
+      tst_cmdfiles: "logging"
+      timeout: '15'
+      skipfile: skipfile-lkft.yaml
+
+  ltp-math:
+    rootfs: debian_buster-ltp_nfs
+    pattern: 'ltp/{category}-{method}-{protocol}-{rootfs}-ltp-template.jinja2'
+    filters:
+      - blocklist: *kselftest_defconfig_filter
+    params:
+      skip_install: "true"
+      tst_cmdfiles: "math"
+      timeout: '30'
+      skipfile: skipfile-lkft.yaml
+
+  ltp-mce-test:
+    rootfs: debian_buster-ltp_nfs
+    pattern: 'ltp/{category}-{method}-{protocol}-{rootfs}-ltp-template.jinja2'
+    filters:
+      - blocklist: *kselftest_defconfig_filter
+    params:
+      skip_install: "true"
+      tst_cmdfiles: "mce-test"
+      timeout: '15'
+      skipfile: skipfile-lkft.yaml
+
+  ltp-mem:
+    rootfs: debian_buster-ltp_nfs
+    pattern: 'ltp/{category}-{method}-{protocol}-{rootfs}-ltp-template.jinja2'
+    filters:
+      - blocklist: *kselftest_defconfig_filter
+    params:
+      skip_install: "true"
+      tst_cmdfiles: "mem"
+      timeout: '15'
+      skipfile: skipfile-lkft.yaml
+
+  ltp-mm:
+    rootfs: debian_buster-ltp_nfs
+    pattern: 'ltp/{category}-{method}-{protocol}-{rootfs}-ltp-template.jinja2'
+    filters:
+      - blocklist: *kselftest_defconfig_filter
+    params:
+      skip_install: "true"
+      tst_cmdfiles: "mm"
+      timeout: '30'
+      skipfile: skipfile-lkft.yaml
+
+  ltp-nptl:
+    rootfs: debian_buster-ltp_nfs
+    pattern: 'ltp/{category}-{method}-{protocol}-{rootfs}-ltp-template.jinja2'
+    filters:
+      - blocklist: *kselftest_defconfig_filter
+    params:
+      skip_install: "true"
+      tst_cmdfiles: "nptl"
+      timeout: '15'
+      skipfile: skipfile-lkft.yaml
+
+  ltp-numa:
+    rootfs: debian_buster-ltp_nfs
+    pattern: 'ltp/{category}-{method}-{protocol}-{rootfs}-ltp-template.jinja2'
+    filters:
+      - blocklist: *kselftest_defconfig_filter
+    params:
+      skip_install: "true"
+      tst_cmdfiles: "numa"
+      timeout: '15'
+      skipfile: skipfile-lkft.yaml
+
+  ltp-power_management:
+    rootfs: debian_buster-ltp_nfs
+    pattern: 'ltp/{category}-{method}-{protocol}-{rootfs}-ltp-template.jinja2'
+    filters:
+      - blocklist: *kselftest_defconfig_filter
+    params:
+      skip_install: "true"
+      tst_cmdfiles: "power_management"
+      timeout: '15'
+      skipfile: skipfile-lkft.yaml
+
+  ltp-pty:
+    rootfs: debian_buster-ltp_nfs
+    pattern: 'ltp/{category}-{method}-{protocol}-{rootfs}-ltp-template.jinja2'
+    filters:
+      - blocklist: *kselftest_defconfig_filter
+    params:
+      skip_install: "true"
+      tst_cmdfiles: "pty"
+      timeout: '15'
+      skipfile: skipfile-lkft.yaml
+
+  ltp-sched:
+    rootfs: debian_buster-ltp_nfs
+    pattern: 'ltp/{category}-{method}-{protocol}-{rootfs}-ltp-template.jinja2'
+    filters:
+      - blocklist: *kselftest_defconfig_filter
+    params:
+      skip_install: "true"
+      tst_cmdfiles: "sched"
+      timeout: '15'
+      skipfile: skipfile-lkft.yaml
+
+  ltp-security:
+    rootfs: debian_buster-ltp_nfs
+    pattern: 'ltp/{category}-{method}-{protocol}-{rootfs}-ltp-template.jinja2'
+    filters:
+      - blocklist: *kselftest_defconfig_filter
+    params:
+      skip_install: "true"
+      tst_cmdfiles: "security"
+      timeout: '15'
+      skipfile: skipfile-lkft.yaml
+
+  ltp-sound:
+    rootfs: debian_buster-ltp_nfs
+    pattern: 'ltp/{category}-{method}-{protocol}-{rootfs}-ltp-template.jinja2'
+    filters:
+      - blocklist: *kselftest_defconfig_filter
+    params:
+      skip_install: "true"
+      tst_cmdfiles: "sound"
+      timeout: '15'
+      skipfile: skipfile-lkft.yaml
+
+  ltp-syscalls:
+    rootfs: debian_buster-ltp_nfs
+    pattern: 'ltp/{category}-{method}-{protocol}-{rootfs}-ltp-template.jinja2'
+    filters:
+      - blocklist: *kselftest_defconfig_filter
+    params:
+      skip_install: "true"
+      tst_cmdfiles: "syscalls"
+      timeout: '90'
+      skipfile: skipfile-lkft.yaml
+
+  ltp-timers:
+    rootfs: debian_buster-ltp_nfs
+    pattern: 'ltp/{category}-{method}-{protocol}-{rootfs}-ltp-template.jinja2'
+    filters:
+      - blocklist: *kselftest_defconfig_filter
+    params:
+      skip_install: "true"
+      tst_cmdfiles: "timers"
+      timeout: '15'
+      skipfile: skipfile-lkft.yaml
+
+  ltp-tracing:
+    rootfs: debian_buster-ltp_nfs
+    pattern: 'ltp/{category}-{method}-{protocol}-{rootfs}-ltp-template.jinja2'
+    filters:
+      - blocklist: *kselftest_defconfig_filter
+    params:
+      skip_install: "true"
+      tst_cmdfiles: "tracing"
+      timeout: '15'
+      skipfile: skipfile-lkft.yaml
+
+  ltp-uevents:
+    rootfs: debian_buster-ltp_nfs
+    pattern: 'ltp/{category}-{method}-{protocol}-{rootfs}-ltp-template.jinja2'
+    filters:
+      - blocklist: *kselftest_defconfig_filter
+    params:
+      skip_install: "true"
+      tst_cmdfiles: "uevents"
+      timeout: '15'
+      skipfile: skipfile-lkft.yaml
+
+ 
   preempt-rt:
     rootfs: debian_buster_nfs
     filters:
@@ -1564,8 +1929,41 @@ test_configs:
   - device_type: bcm2836-rpi-2-b
     test_plans:
       - baseline
+      - ltp-admin_tools
+      - ltp-connectors
+      - ltp-containers
+      - ltp-controllers
       - ltp-crypto
+      - ltp-device-drivers
+      - ltp-fcntl-locktests
+      - ltp-filecaps
+      - ltp-firmware
+      - ltp-fs
+      - ltp-fs_bind
+      - ltp-fsx
+      - ltp-hotplug
+      - ltp-hugetlb
+      - ltp-include
+      - ltp-input
+      - ltp-io
       - ltp-ipc
+      - ltp-lib
+      - ltp-logging
+      - ltp-math
+      - ltp-mce-test
+      - ltp-mem
+      - ltp-mm
+      - ltp-nptl
+      - ltp-numa
+      - ltp-power_management
+      - ltp-pty
+      - ltp-sched
+      - ltp-security
+      - ltp-sound
+      - ltp-syscalls
+      - ltp-timers
+      - ltp-tracing
+      - ltp-uevents
       - sleep
       - usb
 
@@ -1582,8 +1980,41 @@ test_configs:
     test_plans:
       - baseline
       - baseline-nfs
+      - ltp-admin_tools
+      - ltp-connectors
+      - ltp-containers
+      - ltp-controllers
       - ltp-crypto
+      - ltp-device-drivers
+      - ltp-fcntl-locktests
+      - ltp-filecaps
+      - ltp-firmware
+      - ltp-fs
+      - ltp-fs_bind
+      - ltp-fsx
+      - ltp-hotplug
+      - ltp-hugetlb
+      - ltp-include
+      - ltp-input
+      - ltp-io
       - ltp-ipc
+      - ltp-lib
+      - ltp-logging
+      - ltp-math
+      - ltp-mce-test
+      - ltp-mem
+      - ltp-mm
+      - ltp-nptl
+      - ltp-numa
+      - ltp-power_management
+      - ltp-pty
+      - ltp-sched
+      - ltp-security
+      - ltp-sound
+      - ltp-syscalls
+      - ltp-timers
+      - ltp-tracing
+      - ltp-uevents
 
   - device_type: beagle-xm
     test_plans:
@@ -1715,8 +2146,41 @@ test_configs:
     test_plans:
       - baseline
       - baseline-nfs
+      - ltp-admin_tools
+      - ltp-connectors
+      - ltp-containers
+      - ltp-controllers
       - ltp-crypto
+      - ltp-device-drivers
+      - ltp-fcntl-locktests
+      - ltp-filecaps
+      - ltp-firmware
+      - ltp-fs
+      - ltp-fs_bind
+      - ltp-fsx
+      - ltp-hotplug
+      - ltp-hugetlb
+      - ltp-include
+      - ltp-input
+      - ltp-io
       - ltp-ipc
+      - ltp-lib
+      - ltp-logging
+      - ltp-math
+      - ltp-mce-test
+      - ltp-mem
+      - ltp-mm
+      - ltp-nptl
+      - ltp-numa
+      - ltp-power_management
+      - ltp-pty
+      - ltp-sched
+      - ltp-security
+      - ltp-sound
+      - ltp-syscalls
+      - ltp-timers
+      - ltp-tracing
+      - ltp-uevents
       - sleep
       - usb
 
@@ -1772,8 +2236,41 @@ test_configs:
     test_plans:
       - baseline
       - baseline-nfs
+      - ltp-admin_tools
+      - ltp-connectors
+      - ltp-containers
+      - ltp-controllers
       - ltp-crypto
+      - ltp-device-drivers
+      - ltp-fcntl-locktests
+      - ltp-filecaps
+      - ltp-firmware
+      - ltp-fs
+      - ltp-fs_bind
+      - ltp-fsx
+      - ltp-hotplug
+      - ltp-hugetlb
+      - ltp-include
+      - ltp-input
+      - ltp-io
       - ltp-ipc
+      - ltp-lib
+      - ltp-logging
+      - ltp-math
+      - ltp-mce-test
+      - ltp-mem
+      - ltp-mm
+      - ltp-nptl
+      - ltp-numa
+      - ltp-power_management
+      - ltp-pty
+      - ltp-sched
+      - ltp-security
+      - ltp-sound
+      - ltp-syscalls
+      - ltp-timers
+      - ltp-tracing
+      - ltp-uevents
 
   - device_type: kirkwood-db-88f6282
     test_plans:
@@ -1891,8 +2388,41 @@ test_configs:
       - baseline
       - baseline-nfs
       - igt-kms-exynos
+      - ltp-admin_tools
+      - ltp-connectors
+      - ltp-containers
+      - ltp-controllers
       - ltp-crypto
+      - ltp-device-drivers
+      - ltp-fcntl-locktests
+      - ltp-filecaps
+      - ltp-firmware
+      - ltp-fs
+      - ltp-fs_bind
+      - ltp-fsx
+      - ltp-hotplug
+      - ltp-hugetlb
+      - ltp-include
+      - ltp-input
+      - ltp-io
       - ltp-ipc
+      - ltp-lib
+      - ltp-logging
+      - ltp-math
+      - ltp-mce-test
+      - ltp-mem
+      - ltp-mm
+      - ltp-nptl
+      - ltp-numa
+      - ltp-power_management
+      - ltp-pty
+      - ltp-sched
+      - ltp-security
+      - ltp-sound
+      - ltp-syscalls
+      - ltp-timers
+      - ltp-tracing
+      - ltp-uevents
       - sleep
       - usb
 
@@ -2032,8 +2562,41 @@ test_configs:
       - baseline-nfs
       - cros-ec
       - kselftest
+      - ltp-admin_tools
+      - ltp-connectors
+      - ltp-containers
+      - ltp-controllers
       - ltp-crypto
+      - ltp-device-drivers
+      - ltp-fcntl-locktests
+      - ltp-filecaps
+      - ltp-firmware
+      - ltp-fs
+      - ltp-fs_bind
+      - ltp-fsx
+      - ltp-hotplug
+      - ltp-hugetlb
+      - ltp-include
+      - ltp-input
+      - ltp-io
       - ltp-ipc
+      - ltp-lib
+      - ltp-logging
+      - ltp-math
+      - ltp-mce-test
+      - ltp-mem
+      - ltp-mm
+      - ltp-nptl
+      - ltp-numa
+      - ltp-power_management
+      - ltp-pty
+      - ltp-sched
+      - ltp-security
+      - ltp-sound
+      - ltp-syscalls
+      - ltp-timers
+      - ltp-tracing
+      - ltp-uevents
       - sleep
       - v4l2-compliance-uvc
 
@@ -2050,8 +2613,41 @@ test_configs:
     test_plans:
       - baseline
       - baseline-nfs
+      - ltp-admin_tools
+      - ltp-connectors
+      - ltp-containers
+      - ltp-controllers
       - ltp-crypto
+      - ltp-device-drivers
+      - ltp-fcntl-locktests
+      - ltp-filecaps
+      - ltp-firmware
+      - ltp-fs
+      - ltp-fs_bind
+      - ltp-fsx
+      - ltp-hotplug
+      - ltp-hugetlb
+      - ltp-include
+      - ltp-input
+      - ltp-io
       - ltp-ipc
+      - ltp-lib
+      - ltp-logging
+      - ltp-math
+      - ltp-mce-test
+      - ltp-mem
+      - ltp-mm
+      - ltp-nptl
+      - ltp-numa
+      - ltp-power_management
+      - ltp-pty
+      - ltp-sched
+      - ltp-security
+      - ltp-sound
+      - ltp-syscalls
+      - ltp-timers
+      - ltp-tracing
+      - ltp-uevents
       - sleep
       - usb
 
@@ -2067,8 +2663,41 @@ test_configs:
       - igt-kms-rockchip
       - igt-gpu-panfrost
       - kselftest
+      - ltp-admin_tools
+      - ltp-connectors
+      - ltp-containers
+      - ltp-controllers
       - ltp-crypto
+      - ltp-device-drivers
+      - ltp-fcntl-locktests
+      - ltp-filecaps
+      - ltp-firmware
+      - ltp-fs
+      - ltp-fs_bind
+      - ltp-fsx
+      - ltp-hotplug
+      - ltp-hugetlb
+      - ltp-include
+      - ltp-input
+      - ltp-io
       - ltp-ipc
+      - ltp-lib
+      - ltp-logging
+      - ltp-math
+      - ltp-mce-test
+      - ltp-mem
+      - ltp-mm
+      - ltp-nptl
+      - ltp-numa
+      - ltp-power_management
+      - ltp-pty
+      - ltp-sched
+      - ltp-security
+      - ltp-sound
+      - ltp-syscalls
+      - ltp-timers
+      - ltp-tracing
+      - ltp-uevents
       - sleep
       - usb
       - v4l2-compliance-uvc
@@ -2120,8 +2749,41 @@ test_configs:
   - device_type: sun50i-h6-pine-h64
     test_plans:
       - baseline
+      - ltp-admin_tools
+      - ltp-connectors
+      - ltp-containers
+      - ltp-controllers
       - ltp-crypto
+      - ltp-device-drivers
+      - ltp-fcntl-locktests
+      - ltp-filecaps
+      - ltp-firmware
+      - ltp-fs
+      - ltp-fs_bind
+      - ltp-fsx
+      - ltp-hotplug
+      - ltp-hugetlb
+      - ltp-include
+      - ltp-input
+      - ltp-io
       - ltp-ipc
+      - ltp-lib
+      - ltp-logging
+      - ltp-math
+      - ltp-mce-test
+      - ltp-mem
+      - ltp-mm
+      - ltp-nptl
+      - ltp-numa
+      - ltp-power_management
+      - ltp-pty
+      - ltp-sched
+      - ltp-security
+      - ltp-sound
+      - ltp-syscalls
+      - ltp-timers
+      - ltp-tracing
+      - ltp-uevents
 
   - device_type: sun50i-h6-pine-h64-model-b
     test_plans:
